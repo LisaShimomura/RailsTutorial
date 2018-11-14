@@ -7,7 +7,7 @@ class Micropost < ApplicationRecord
                       length: { maximum: 140 }
   validate  :picture_size
    private
-
+     
     def picture_size
       if picture.size > 1.megabytes
         errors.add(:picture, "should be less than 1MB")
