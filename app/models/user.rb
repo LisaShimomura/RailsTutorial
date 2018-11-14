@@ -8,8 +8,7 @@ class User < ApplicationRecord
         class_name: 'Relationship',
        foreign_key: :followed_id,
          dependent: :destroy
-  # @user.active_relationships.map(&:followed)
-  # @user.following
+
   has_many :following,
     through: 'active_relationships',
      source: 'followed'
@@ -46,7 +45,7 @@ class User < ApplicationRecord
     self.update_attribute(:remember_digest, nil)
   end
 
-  # 渡されたトークンがダイジェストと一致したらtrueを返す
+
   def authenticated?(attribute, token)
     digest = self.send("#{attribute}_digest")
     return false if digest.nil?
@@ -72,11 +71,6 @@ class User < ApplicationRecord
     reset_sent_at < 2.hours.ago
   end
 
-  # 試作feedの定義
-  # 完全な実装は次章の「ユーザーをフォローする」を参照
-  # current_user.feed
-  # current_user.id
-  # current_user.microposts
   def feed
     following_ids = "SELECT followed_id FROM relationships
                      WHERE follower_id = :user_id"
@@ -101,6 +95,6 @@ class User < ApplicationRecord
     def create_activation_digest
       self.activation_token  = User.new_token
       self.activation_digest = User.digest(self.activation_token)
-      # @user.activation_digest => ハッシュ値
+
     end
 end
